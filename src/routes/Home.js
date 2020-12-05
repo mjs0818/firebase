@@ -1,38 +1,38 @@
-import React, { useEffect, useState } from "react"
-import { dbService } from "../fbase"
+import React, { useEffect, useState } from 'react';
+import { dbService } from '../fbase';
 
-const Home = () => {
-  const [nweet, setNweet] = useState("")
-  const [nweets, setNweets] = useState([])
+const Home = ({ userObj }) => {
+  const [nweet, setNweet] = useState('');
+  const [nweets, setNweets] = useState([]);
   const getNweets = async () => {
-    const dbNweets = await dbService.collection("nweets").get()
+    const dbNweets = await dbService.collection('nweets').get();
     dbNweets.forEach((document) => {
       const nweetObject = {
         ...document.data(),
         id: document.id,
-      }
-      setNweets((prev) => [nweetObject, ...prev])
-    })
-  }
+      };
+      setNweets((prev) => [nweetObject, ...prev]);
+    });
+  };
 
   useEffect(() => {
-    getNweets()
-  }, [])
+    getNweets();
+  }, []);
 
   const onSubmit = async (evnet) => {
-    evnet.preventDefault()
-    await dbService.collection("nweets").add({
-      nweet,
+    evnet.preventDefault();
+    await dbService.collection('nweets').add({
+      text: nweet,
       createdAt: Date.now(),
-    })
-    setNweet("")
-  }
+    });
+    setNweet('');
+  };
   const onChange = (event) => {
     const {
       target: { value },
-    } = event
-    setNweet(value)
-  }
+    } = event;
+    setNweet(value);
+  };
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -47,6 +47,6 @@ const Home = () => {
         ))}
       </div>
     </div>
-  )
-}
-export default Home
+  );
+};
+export default Home;

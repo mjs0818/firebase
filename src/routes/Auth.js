@@ -1,66 +1,66 @@
-import React, { useState } from "react"
-import { authService, firebaseInstance } from "../fbase"
+import React, { useState } from 'react';
+import { authService, firebaseInstance } from '../fbase';
 
 const Auth = () => {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [newAccount, setNewAccount] = useState(true)
-  const [error, setError] = useState("")
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [newAccount, setNewAccount] = useState(true);
+  const [error, setError] = useState('');
   const onChange = (event) => {
     const {
       target: { name, value },
-    } = event
-    if (name === "email") {
-      setEmail(value)
-    } else if (name === "password") {
-      setPassword(value)
+    } = event;
+    if (name === 'email') {
+      setEmail(value);
+    } else if (name === 'password') {
+      setPassword(value);
     }
-  }
+  };
   const onSubmit = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
     try {
-      let data
+      let data;
       if (newAccount) {
         //create account
-        data = await authService.createUserWithEmailAndPassword(email, password)
+        data = await authService.createUserWithEmailAndPassword(email, password);
       } else {
         //log in
-        data = await authService.signInWithEmailAndPassword
+        data = await authService.signInWithEmailAndPassword;
       }
-      console.log(data)
+      console.log(data);
     } catch (error) {
-      setError(error.message)
+      setError(error.message);
     }
-  }
+  };
 
-  const toggleAccount = () => setNewAccount((prev) => !prev)
+  const toggleAccount = () => setNewAccount((prev) => !prev);
   const onSocialClick = async (event) => {
-    console.log(event)
+    console.log(event);
     const {
       target: { name },
-    } = event
-    let provider
-    if (name === "google") {
-      provider = new firebaseInstance.auth.GoogleAuthProvider()
+    } = event;
+    let provider;
+    if (name === 'google') {
+      provider = new firebaseInstance.auth.GoogleAuthProvider();
     }
-    const data = await authService.signInWithPopup(provider)
-    console.log(data)
-  }
+    const data = await authService.signInWithPopup(provider);
+    console.log(data);
+  };
   return (
     <div>
       <form onSubmit={onSubmit}>
         <input name="email" type="text" placeholder="Email" required value={email} onChange={onChange} />
         <input name="password" type="password" placeholder="password" required value={password} onChange={onChange} />
-        <input type="submit" value={newAccount ? "Create Account" : "sign in"} />
+        <input type="submit" value={newAccount ? 'Create Account' : 'sign in'} />
         {error}
       </form>
-      <span onClick={toggleAccount}>{newAccount ? "sign in" : "create Account"}</span>
+      <span onClick={toggleAccount}>{newAccount ? 'sign in' : 'create Account'}</span>
       <div>
         <button onClick={onSocialClick} name="google">
           Continue with google
         </button>
       </div>
     </div>
-  )
-}
-export default Auth
+  );
+};
+export default Auth;
